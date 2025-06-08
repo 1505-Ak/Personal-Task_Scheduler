@@ -50,16 +50,26 @@ export default function Home() {
   };
 
   const handleUpdateTask = async (taskData: TaskFormData) => {
-    if (!editingTask) return;
+    console.log('handleUpdateTask called with:', taskData);
+    console.log('editingTask:', editingTask);
+    
+    if (!editingTask) {
+      console.error('No editingTask found!');
+      return;
+    }
     
     try {
+      console.log('Updating task with ID:', editingTask.id);
       const updatedTask = await api.updateTask(editingTask.id, taskData);
+      console.log('Updated task received:', updatedTask);
+      
       setTasks(prev => prev.map(task => 
         task.id === editingTask.id ? updatedTask : task
       ));
       setEditingTask(undefined);
       setIsFormOpen(false);
       setError(null);
+      console.log('Task updated successfully');
     } catch (err) {
       setError('Failed to update task');
       console.error('Error updating task:', err);
@@ -96,6 +106,7 @@ export default function Home() {
   };
 
   const handleEditTask = (task: Task) => {
+    console.log('Editing task:', task);
     setEditingTask(task);
     setIsFormOpen(true);
   };

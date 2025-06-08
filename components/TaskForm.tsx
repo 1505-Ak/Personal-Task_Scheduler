@@ -60,8 +60,14 @@ export default function TaskForm({ task, onSubmit, onCancel, isOpen }: TaskFormP
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted with data:', formData);
+    console.log('Is editing task?', !!task);
+    
     if (validateForm()) {
+      console.log('Form validation passed, calling onSubmit');
       onSubmit(formData);
+    } else {
+      console.log('Form validation failed');
     }
   };
 

@@ -1,24 +1,13 @@
 [
   {
-    "id": "1749345429421",
-    "title": "footballMath",
-    "description": "",
-    "priority": "high",
-    "dueDate": "2025-06-05",
-    "category": "general",
-    "completed": false,
-    "createdAt": "2025-06-08T01:17:09.421Z",
-    "updatedAt": "2025-06-08T01:17:09.421Z"
-  },
-  {
     "id": "1749345896098",
     "title": "Leetcode 5 questions",
     "description": "",
     "priority": "low",
     "dueDate": null,
     "category": "general",
-    "completed": false,
+    "completed": true,
     "createdAt": "2025-06-08T01:24:56.098Z",
-    "updatedAt": "2025-06-08T01:24:56.098Z"
+    "updatedAt": "2025-06-08T01:36:16.100Z"
   }
 ]
