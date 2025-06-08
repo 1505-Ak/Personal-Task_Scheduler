@@ -601,6 +601,9 @@ video {
 .top-4 {
   top: 1rem;
 }
+.z-10 {
+  z-index: 10;
+}
 .z-50 {
   z-index: 50;
 }
@@ -1282,32 +1285,41 @@ body {
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   border: none;
   position: relative;
-  transform-style: preserve-3d;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-3d::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 4px;
+  left: 4px;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  background: linear-gradient(135deg, #1e40af, #6d28d9);
   border-radius: inherit;
-  transform: translateZ(-6px);
+  z-index: -1;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-3d:hover {
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-2px);
   box-shadow: 
     0 15px 30px rgba(59, 130, 246, 0.4),
     0 5px 15px rgba(139, 92, 246, 0.3);
 }
 
+.btn-3d:hover::before {
+  top: 6px;
+  left: 6px;
+}
+
 .btn-3d:active {
-  transform: translateY(0px) scale(1.02);
+  transform: translateY(0px);
+}
+
+.btn-3d:active::before {
+  top: 2px;
+  left: 2px;
 }
 
 /* Animated gradient text */
@@ -1520,10 +1532,6 @@ body {
 }
 .focus\:ring-red-500\/50:focus {
   --tw-ring-color: rgb(239 68 68 / 0.5);
-}
-.group:hover .group-hover\:rotate-180 {
-  --tw-rotate: 180deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .group:hover .group-hover\:scale-110 {
   --tw-scale-x: 1.1;

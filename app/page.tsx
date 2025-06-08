@@ -172,7 +172,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            Organize your tasks beautifully with stunning 3D animations
+            Stay organized, boost productivity, achieve your goals
           </motion.p>
           <motion.div
             className="mt-4 w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full pulse-glow"
@@ -304,19 +304,13 @@ export default function Home() {
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsFormOpen(true)}
-            className="btn-3d flex items-center gap-3 px-8 py-4 text-white rounded-2xl font-bold text-lg shadow-2xl relative overflow-hidden group min-w-[180px] justify-center"
+            className="btn-3d flex items-center gap-3 px-8 py-4 text-white rounded-2xl font-bold text-lg shadow-2xl relative overflow-hidden group min-w-[180px] justify-center z-10"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.9, type: "spring", stiffness: 200 }}
           >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="group-hover:rotate-180 transition-transform duration-300"
-            >
-              <Plus className="w-6 h-6" />
-            </motion.div>
-            <span>Add Task</span>
+            <Plus className="w-6 h-6 relative z-10" />
+            <span className="relative z-10">Add Task</span>
           </motion.button>
         </motion.div>
 
@@ -411,12 +405,12 @@ export default function Home() {
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsFormOpen(true)}
-                  className="btn-3d px-8 py-4 text-white rounded-2xl font-bold text-lg shadow-2xl"
+                  className="btn-3d px-8 py-4 text-white rounded-2xl font-bold text-lg shadow-2xl relative z-10"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1.6, type: "spring", stiffness: 200 }}
                 >
-                  ✨ Create Your First Task
+                  <span className="relative z-10">✨ Create Your First Task</span>
                 </motion.button>
               )}
             </motion.div>

@@ -278,20 +278,15 @@ export default function TaskForm({ task, onSubmit, onCancel, isOpen }: TaskFormP
                 >
                   Cancel
                 </motion.button>
-                <motion.button
-                  type="submit"
-                  className="flex-1 btn-3d px-6 py-4 text-white rounded-2xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 text-lg shadow-2xl"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <motion.div
-                    animate={{ rotate: task ? 0 : 360 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  >
-                    {task ? <Save className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
-                  </motion.div>
-                  <span>{task ? 'Update Task' : 'Create Task'}</span>
-                </motion.button>
+                                 <motion.button
+                   type="submit"
+                   className="flex-1 btn-3d px-6 py-4 text-white rounded-2xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 text-lg shadow-2xl relative z-10"
+                   whileHover={{ scale: 1.02, y: -2 }}
+                   whileTap={{ scale: 0.98 }}
+                 >
+                   {task ? <Save className="w-5 h-5 relative z-10" /> : <Plus className="w-5 h-5 relative z-10" />}
+                   <span className="relative z-10">{task ? 'Update Task' : 'Create Task'}</span>
+                 </motion.button>
               </motion.div>
             </form>
           </motion.div>
