@@ -138,147 +138,185 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen flex items-center justify-center">
         <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="spinner-3d"
         />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen p-4">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          <motion.h1 
+            className="text-6xl font-black gradient-text mb-4 float"
+            initial={{ scale: 0.5 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1, ease: "backOut" }}
+          >
             ✨ Personal Task Scheduler
-          </h1>
-          <p className="text-gray-600">
-            Organize your tasks beautifully and boost your productivity
-          </p>
+          </motion.h1>
+          <motion.p 
+            className="text-slate-300 text-xl font-medium"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
+            Organize your tasks beautifully with stunning 3D animations
+          </motion.p>
+          <motion.div
+            className="mt-4 w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full pulse-glow"
+            initial={{ width: 0 }}
+            animate={{ width: 80 }}
+            transition={{ delay: 1, duration: 0.8 }}
+          />
         </motion.div>
 
         {/* Error Message */}
         <AnimatePresence>
           {error && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mb-6 p-4 bg-red-100 border border-red-200 text-red-700 rounded-lg"
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              className="mb-8 p-6 glass-card border border-red-400/30 text-red-300 rounded-xl backdrop-blur-xl shadow-xl"
             >
-              {error}
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">!</span>
+                </div>
+                {error}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Stats Cards */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
         >
-          <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-white/20 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total</p>
-                <p className="text-2xl font-bold text-gray-800">{stats.total}</p>
+          {[
+            { label: 'Total', value: stats.total, icon: Calendar, color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-500/10' },
+            { label: 'Completed', value: stats.completed, icon: CheckCircle, color: 'from-green-500 to-emerald-500', bgColor: 'bg-green-500/10' },
+            { label: 'Pending', value: stats.pending, icon: Clock, color: 'from-amber-500 to-orange-500', bgColor: 'bg-amber-500/10' },
+            { label: 'Overdue', value: stats.overdue, icon: AlertCircle, color: 'from-red-500 to-pink-500', bgColor: 'bg-red-500/10' }
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.3 + index * 0.1, duration: 0.6 }}
+              className="glass-card glass-card-hover card-3d rounded-2xl p-6 group cursor-default"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-400 font-medium mb-1">{stat.label}</p>
+                  <motion.p 
+                    className="text-3xl font-black text-white"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.5 + index * 0.1, type: "spring", stiffness: 200 }}
+                  >
+                    {stat.value}
+                  </motion.p>
+                </div>
+                <motion.div
+                  className={`w-14 h-14 ${stat.bgColor} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`}
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <stat.icon className={`w-8 h-8 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`} />
+                </motion.div>
               </div>
-              <Calendar className="w-8 h-8 text-blue-500" />
-            </div>
-          </div>
-          
-          <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-white/20 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Completed</p>
-                <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
-            </div>
-          </div>
-          
-          <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-white/20 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.pending}</p>
-              </div>
-              <Clock className="w-8 h-8 text-blue-500" />
-            </div>
-          </div>
-          
-          <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-white/20 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Overdue</p>
-                <p className="text-2xl font-bold text-red-600">{stats.overdue}</p>
-              </div>
-              <AlertCircle className="w-8 h-8 text-red-500" />
-            </div>
-          </div>
+              <div className={`mt-4 h-1 w-full bg-gradient-to-r ${stat.color} rounded-full opacity-60 group-hover:opacity-100 transition-opacity`} />
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Controls */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-col md:flex-row gap-4 mb-8"
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="flex flex-col lg:flex-row gap-6 mb-12"
         >
           {/* Search */}
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <motion.div 
+            className="flex-1 relative"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-slate-400" />
             <input
               type="text"
-              placeholder="Search tasks..."
+              placeholder="Search through your tasks..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white/70 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-12 pr-6 py-4 glass-card text-white placeholder-slate-400 border border-slate-600/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all text-lg"
             />
-          </div>
+          </motion.div>
 
           {/* Filters */}
-          <div className="flex gap-2">
+          <motion.div 
+            className="flex gap-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8 }}
+          >
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              className="px-4 py-3 bg-white/70 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-6 py-4 glass-card text-white border border-slate-600/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 bg-transparent text-lg min-w-[160px]"
             >
-              <option value="all">All Priorities</option>
-              <option value="high">High Priority</option>
-              <option value="medium">Medium Priority</option>
-              <option value="low">Low Priority</option>
+              <option value="all" className="bg-slate-800">All Priorities</option>
+              <option value="high" className="bg-slate-800">🔴 High Priority</option>
+              <option value="medium" className="bg-slate-800">🟡 Medium Priority</option>
+              <option value="low" className="bg-slate-800">🟢 Low Priority</option>
             </select>
             
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-3 bg-white/70 backdrop-blur-sm border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-6 py-4 glass-card text-white border border-slate-600/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 bg-transparent text-lg min-w-[140px]"
             >
-              <option value="all">All Tasks</option>
-              <option value="pending">Pending</option>
-              <option value="completed">Completed</option>
+              <option value="all" className="bg-slate-800">All Tasks</option>
+              <option value="pending" className="bg-slate-800">⏳ Pending</option>
+              <option value="completed" className="bg-slate-800">✅ Completed</option>
             </select>
-          </div>
+          </motion.div>
 
           {/* Add Task Button */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => setIsFormOpen(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-lg"
+            className="btn-3d flex items-center gap-3 px-8 py-4 text-white rounded-2xl font-bold text-lg shadow-2xl relative overflow-hidden group min-w-[180px] justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.9, type: "spring", stiffness: 200 }}
           >
-            <Plus className="w-5 h-5" />
-            <span className="hidden md:inline">Add Task</span>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className="group-hover:rotate-180 transition-transform duration-300"
+            >
+              <Plus className="w-6 h-6" />
+            </motion.div>
+            <span>Add Task</span>
           </motion.button>
         </motion.div>
 
@@ -286,17 +324,23 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          transition={{ delay: 1.0, duration: 0.8 }}
+          className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
         >
-          <AnimatePresence>
+          <AnimatePresence mode="popLayout">
             {filteredTasks.map((task, index) => (
               <motion.div
                 key={task.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -30, scale: 0.9 }}
+                transition={{ 
+                  delay: 1.1 + index * 0.1, 
+                  duration: 0.6,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                layout
               >
                 <TaskCard
                   task={task}
@@ -312,36 +356,70 @@ export default function Home() {
         {/* Empty State */}
         {filteredTasks.length === 0 && !loading && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-12"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="text-center py-20"
           >
-            <div className="text-gray-400 mb-4">
-              {tasks.length === 0 ? (
-                <Calendar className="w-16 h-16 mx-auto mb-4" />
-              ) : (
-                <Filter className="w-16 h-16 mx-auto mb-4" />
-              )}
-            </div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">
-              {tasks.length === 0 ? 'No tasks yet' : 'No tasks match your filters'}
-            </h3>
-            <p className="text-gray-500 mb-6">
-              {tasks.length === 0 
-                ? 'Create your first task to get started!'
-                : 'Try adjusting your search or filter criteria'
-              }
-            </p>
-            {tasks.length === 0 && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsFormOpen(true)}
-                className="px-8 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-lg"
+            <motion.div
+              className="glass-card rounded-3xl p-12 max-w-md mx-auto border border-slate-600/30"
+              whileHover={{ scale: 1.02, y: -5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <motion.div 
+                className="text-slate-400 mb-8"
+                animate={{ 
+                  y: [0, -10, 0],
+                  rotate: [0, 5, -5, 0]
+                }}
+                transition={{ 
+                  duration: 4, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
               >
-                Create Your First Task
-              </motion.button>
-            )}
+                {tasks.length === 0 ? (
+                  <Calendar className="w-20 h-20 mx-auto mb-4" />
+                ) : (
+                  <Filter className="w-20 h-20 mx-auto mb-4" />
+                )}
+              </motion.div>
+              
+              <motion.h3 
+                className="text-2xl font-bold text-white mb-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4 }}
+              >
+                {tasks.length === 0 ? '🚀 Ready to Get Started?' : '🔍 No Tasks Found'}
+              </motion.h3>
+              
+              <motion.p 
+                className="text-slate-300 mb-8 leading-relaxed"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.5 }}
+              >
+                {tasks.length === 0 
+                  ? 'Create your first task and start organizing your life with our beautiful task scheduler!'
+                  : 'Try adjusting your search or filter criteria to find what you\'re looking for.'
+                }
+              </motion.p>
+              
+              {tasks.length === 0 && (
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsFormOpen(true)}
+                  className="btn-3d px-8 py-4 text-white rounded-2xl font-bold text-lg shadow-2xl"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1.6, type: "spring", stiffness: 200 }}
+                >
+                  ✨ Create Your First Task
+                </motion.button>
+              )}
+            </motion.div>
           </motion.div>
         )}
 

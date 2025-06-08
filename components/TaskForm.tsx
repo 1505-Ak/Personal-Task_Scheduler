@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Task, TaskFormData } from '@/types/task';
-import { X, Save, Plus } from 'lucide-react';
+import { X, Save, Plus, Sparkles, Calendar, Flag, Tag } from 'lucide-react';
 
 interface TaskFormProps {
   task?: Task;
@@ -72,133 +72,231 @@ export default function TaskForm({ task, onSubmit, onCancel, isOpen }: TaskFormP
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-      onClick={onCancel}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="glass w-full max-w-md p-6 rounded-2xl shadow-soft-lg"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
-            {task ? <Save size={24} /> : <Plus size={24} />}
-            <span>{task ? 'Edit Task' : 'Create New Task'}</span>
-          </h2>
-          <button
-            onClick={onCancel}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50"
+          onClick={onCancel}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="glass-card w-full max-w-lg p-8 rounded-3xl shadow-2xl border border-slate-600/30 relative overflow-hidden"
+            onClick={e => e.stopPropagation()}
           >
-            <X size={20} />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Title *
-            </label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => handleChange('title', e.target.value)}
-              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 ${
-                errors.title ? 'border-red-300' : 'border-gray-300'
-              }`}
-              placeholder="Enter task title..."
+            {/* Animated background */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-cyan-500/10"
+              animate={{
+                backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "linear"
+              }}
             />
-            {errors.title && (
-              <p className="text-red-500 text-xs mt-1">{errors.title}</p>
-            )}
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => handleChange('description', e.target.value)}
-              rows={3}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 resize-none"
-              placeholder="Add a description..."
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Priority
-              </label>
-              <select
-                value={formData.priority}
-                onChange={(e) => handleChange('priority', e.target.value as 'low' | 'medium' | 'high')}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200"
+            {/* Header */}
+            <motion.div 
+              className="flex items-center justify-between mb-8 relative"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <div className="flex items-center space-x-3">
+                <motion.div
+                  className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center"
+                  whileHover={{ scale: 1.1, rotate: 180 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  {task ? <Save className="w-6 h-6 text-white" /> : <Plus className="w-6 h-6 text-white" />}
+                </motion.div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white">
+                    {task ? 'Edit Task' : 'Create New Task'}
+                  </h2>
+                  <p className="text-slate-400 text-sm">
+                    {task ? 'Update your task details' : 'Add a new task to your list'}
+                  </p>
+                </div>
+              </div>
+              <motion.button
+                onClick={onCancel}
+                className="w-10 h-10 bg-slate-700/50 hover:bg-slate-600/50 text-slate-400 hover:text-white rounded-2xl flex items-center justify-center transition-all duration-300"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
-                <option value="low">🟢 Low</option>
-                <option value="medium">🟡 Medium</option>
-                <option value="high">🔴 High</option>
-              </select>
-            </div>
+                <X className="w-5 h-5" />
+              </motion.button>
+            </motion.div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Due Date
-              </label>
-              <input
-                type="date"
-                value={formData.dueDate}
-                onChange={(e) => handleChange('dueDate', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200"
-              />
-            </div>
-          </div>
+            <form onSubmit={handleSubmit} className="space-y-6 relative">
+              {/* Title Field */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <label className="block text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => handleChange('title', e.target.value)}
+                  className={`w-full px-4 py-4 glass-card text-white placeholder-slate-400 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-lg ${
+                    errors.title ? 'border-red-500/50 focus:ring-red-500/50' : 'border-slate-600/30'
+                  }`}
+                  placeholder="What needs to be done?"
+                />
+                <AnimatePresence>
+                  {errors.title && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="text-red-400 text-sm mt-2"
+                    >
+                      {errors.title}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </motion.div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category *
-            </label>
-            <input
-              type="text"
-              value={formData.category}
-              onChange={(e) => handleChange('category', e.target.value)}
-              className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 ${
-                errors.category ? 'border-red-300' : 'border-gray-300'
-              }`}
-              placeholder="e.g., Work, Personal, Shopping..."
-            />
-            {errors.category && (
-              <p className="text-red-500 text-xs mt-1">{errors.category}</p>
-            )}
-          </div>
+              {/* Description Field */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <label className="block text-sm font-semibold text-slate-300 mb-3">
+                  Description
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => handleChange('description', e.target.value)}
+                  rows={3}
+                  className="w-full px-4 py-4 glass-card text-white placeholder-slate-400 border border-slate-600/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 resize-none text-lg"
+                  placeholder="Add more details about your task..."
+                />
+              </motion.div>
 
-          <div className="flex space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 font-medium transition-colors duration-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
-            >
-              {task ? <Save size={18} /> : <Plus size={18} />}
-              <span>{task ? 'Update' : 'Create'}</span>
-            </button>
-          </div>
-        </form>
-      </motion.div>
-    </motion.div>
+              {/* Priority and Due Date */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <label className="block text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                    <Flag className="w-4 h-4" />
+                    Priority
+                  </label>
+                  <select
+                    value={formData.priority}
+                    onChange={(e) => handleChange('priority', e.target.value as 'low' | 'medium' | 'high')}
+                    className="w-full px-4 py-4 glass-card text-white border border-slate-600/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-lg bg-transparent"
+                  >
+                    <option value="low" className="bg-slate-800 text-white">🟢 Low Priority</option>
+                    <option value="medium" className="bg-slate-800 text-white">🟡 Medium Priority</option>
+                    <option value="high" className="bg-slate-800 text-white">🔴 High Priority</option>
+                  </select>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <label className="block text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    Due Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.dueDate}
+                    onChange={(e) => handleChange('dueDate', e.target.value)}
+                    className="w-full px-4 py-4 glass-card text-white border border-slate-600/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-lg bg-transparent"
+                  />
+                </motion.div>
+              </div>
+
+              {/* Category Field */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <label className="block text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                  <Tag className="w-4 h-4" />
+                  Category *
+                </label>
+                <input
+                  type="text"
+                  value={formData.category}
+                  onChange={(e) => handleChange('category', e.target.value)}
+                  className={`w-full px-4 py-4 glass-card text-white placeholder-slate-400 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-lg ${
+                    errors.category ? 'border-red-500/50 focus:ring-red-500/50' : 'border-slate-600/30'
+                  }`}
+                  placeholder="e.g., Work, Personal, Shopping..."
+                />
+                <AnimatePresence>
+                  {errors.category && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="text-red-400 text-sm mt-2"
+                    >
+                      {errors.category}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+
+              {/* Action Buttons */}
+              <motion.div
+                className="flex space-x-4 pt-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+              >
+                <motion.button
+                  type="button"
+                  onClick={onCancel}
+                  className="flex-1 px-6 py-4 glass-card border border-slate-600/30 text-slate-300 hover:text-white rounded-2xl font-semibold transition-all duration-300 text-lg"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  type="submit"
+                  className="flex-1 btn-3d px-6 py-4 text-white rounded-2xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 text-lg shadow-2xl"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <motion.div
+                    animate={{ rotate: task ? 0 : 360 }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  >
+                    {task ? <Save className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                  </motion.div>
+                  <span>{task ? 'Update Task' : 'Create Task'}</span>
+                </motion.button>
+              </motion.div>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 } 
